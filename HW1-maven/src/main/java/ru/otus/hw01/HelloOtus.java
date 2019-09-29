@@ -1,4 +1,4 @@
-package main.java;
+package ru.otus.hw01;
 
 import com.google.common.base.Joiner;
 
@@ -10,7 +10,7 @@ public class HelloOtus {
         for (int i = 1; i < 100; i++) {
             list.add(String.valueOf(i));
         }
-        String joiner = Joiner.on(") ").skipNulls().join(list);
+        String joiner = Joiner.on(")Hello Otus! ").skipNulls().join(list);
         System.out.println(joiner);
     }
 }
