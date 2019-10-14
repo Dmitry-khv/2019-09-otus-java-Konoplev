@@ -7,7 +7,6 @@ public class DIYarrayList<T> implements List<T> {
     private Object[] array;
     private int capacity = 0;
     private final int INIT_SIZE = 10;
-    private int collectionCopySize;
 
     public DIYarrayList() {
         this.array = new Object[INIT_SIZE];
@@ -17,12 +16,12 @@ public class DIYarrayList<T> implements List<T> {
         this.array = new Object[setSize];
     }
 
-    public DIYarrayList (DIYarrayList<T> list) {
-        this.array = list.toArray();
-        collectionCopySize = array.length;
+    public DIYarrayList (List<T> list) {
+        if ((capacity = list.size()) != 0)
+            this.array = Arrays.copyOf(list.toArray(), capacity);
     }
 
-    public int arraySize() {
+    private int arraySize() {
         return array.length;
     }
 
@@ -32,7 +31,7 @@ public class DIYarrayList<T> implements List<T> {
 
     @Override
     public int size() {
-        return collectionCopySize > 0 ? collectionCopySize : capacity;
+        return capacity;
     }
 
     @Override
@@ -83,7 +82,6 @@ public class DIYarrayList<T> implements List<T> {
         throw new UnsupportedOperationException();
     }
 
-
     @Override
     public boolean addAll(Collection<? extends T> c) {
         throw new UnsupportedOperationException();
@@ -118,10 +116,13 @@ public class DIYarrayList<T> implements List<T> {
 
     @Override
     public T set(int index, T element) {
-        Object prevElement = array[index];
-        array[index] = element;
-        capacity = index + 1;
-        return (T) prevElement;
+        if (index > 0 || index < size()) {
+            Object prevElement = array[index];
+            array[index] = element;
+            capacity = index + 1;
+            return (T) prevElement;
+        } else
+            throw new IndexOutOfBoundsException();
     }
 
     @Override
@@ -166,41 +167,39 @@ public class DIYarrayList<T> implements List<T> {
 
             @Override
             public boolean hasPrevious() {
-                return false;
+                throw new UnsupportedOperationException();
             }
 
             @Override
             public T previous() {
-                return null;
+                throw new UnsupportedOperationException();
             }
 
             @Override
             public int nextIndex() {
-                return 0;
+                throw new UnsupportedOperationException();
             }
 
             @Override
             public int previousIndex() {
-                return 0;
+                throw new UnsupportedOperationException();
             }
 
             @Override
             public void remove() {
-
+                throw new UnsupportedOperationException();
             }
 
             @Override
             public void set(T t) {
                 array[currentIndex] = t;
-//                currentIndex++;
             }
 
             @Override
             public void add(T t) {
-
+                throw new UnsupportedOperationException();
             }
         };
-//        return listIterator;
     }
 
     @Override
@@ -208,16 +207,8 @@ public class DIYarrayList<T> implements List<T> {
         throw new UnsupportedOperationException();
     }
 
-
     @Override
     public List<T> subList(int fromIndex, int toIndex) {
         throw new UnsupportedOperationException();
     }
-
-
 }
-
-
-
-
-
