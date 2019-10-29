@@ -17,7 +17,8 @@ public class DIYarrayList<T> implements List<T> {
     }
 
     public DIYarrayList (List<T> list) {
-        if ((capacity = list.size()) != 0)
+        capacity = list.size();
+        if (capacity != 0)
             this.array = Arrays.copyOf(list.toArray(), capacity);
     }
 
