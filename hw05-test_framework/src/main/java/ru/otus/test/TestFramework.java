@@ -42,7 +42,6 @@ public class TestFramework {
 
             for (Method beforeMethod : beforeMethods)
                 beforeMethod.invoke(testClass);
-
             try {
                 testMethod.invoke(testClass);
             } catch (Exception e) {
