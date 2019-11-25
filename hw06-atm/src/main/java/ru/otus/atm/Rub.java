@@ -2,11 +2,11 @@ package ru.otus.atm;
 
 import java.util.Objects;
 
-public class BanknotesImpl implements Banknotes {
+public class Rub implements Banknotes {
     private final Value value;
     private int amount;
 
-    BanknotesImpl(Value value, int amount) {
+    Rub(Value value, int amount) {
         this.value = value;
         this.amount = amount;
     }
@@ -30,7 +30,7 @@ public class BanknotesImpl implements Banknotes {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        BanknotesImpl banknotes = (BanknotesImpl) o;
+        Rub banknotes = (Rub) o;
         return value == banknotes.value;
     }
 
