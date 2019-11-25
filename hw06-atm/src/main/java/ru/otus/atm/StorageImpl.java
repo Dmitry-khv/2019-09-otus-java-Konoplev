@@ -1,41 +1,42 @@
 package ru.otus.atm;
 
-import java.util.*;
+import java.util.Iterator;
+import java.util.Set;
+import java.util.TreeSet;
 
-public class StorageImpl {
-    private static Set<Banknotes> storage = new TreeSet<>();
+public class StorageImpl implements Storage {
+    private Set<Banknotes> cassettes = new TreeSet<>();
 
-    public void putToStorage(Banknotes banknotes) {
-        int amount = banknotes.getAmount();
-        Iterator<Banknotes> banknotesIterator = storage.iterator();
-        while (banknotesIterator.hasNext()) {
-            Banknotes iterator = banknotesIterator.next();
-            if (iterator.equals(banknotes)) {
-                amount += iterator.getAmount();
-                banknotesIterator.remove();
+    @Override
+    public void putToCassette(Banknotes newBanknote) {
+        int amountOfNewBanknote = newBanknote.getAmount();
+        Iterator<Banknotes> oldBanknotes = cassettes.iterator();
+        while (oldBanknotes.hasNext()) {
+            Banknotes oldBanknote = oldBanknotes.next();
+            if (oldBanknote.equals(newBanknote)) {
+                amountOfNewBanknote += oldBanknote.getAmount();
+                oldBanknotes.remove();
                 break;
             }
         }
-        storage.add(new BanknotesImpl(banknotes.getValue(), amount));
+        cassettes.add(new BanknotesImpl(newBanknote.getValue(), amountOfNewBanknote));
     }
 
-
-    public Set<Banknotes> getFromStorage(int amount) {
-        if (amount > getCurrentSum())
-            throw new IllegalArgumentException("Сумма превышает допустимую");
+    private Set<Banknotes> createBundleForDeliver(int amount) {
         Set<Banknotes> delivery = new TreeSet<>();
-        Iterator<Banknotes> banknotesIterator = storage.iterator();
+        Iterator<Banknotes> banknotesIterator = cassettes.iterator();
         Banknotes banknote;
+        Value banknoteValue;
         int currentValue;
         int currentAmount;
-        Value banknoteValue;
         int temp = 0;
 
         while (banknotesIterator.hasNext()) {
             banknote = banknotesIterator.next();
             banknoteValue = banknote.getValue();
-            currentValue = banknote.getValue().getValue();
+            currentValue = banknoteValue.getValue();
             currentAmount = banknote.getAmount();
+
             if (amount >= currentValue) {
                 temp = amount / currentValue;
                 if (temp <= currentAmount)
@@ -47,36 +48,48 @@ public class StorageImpl {
             }
             amount -= temp*currentValue;
         }
-        if (amount != 0)
-            throw new IllegalArgumentException("Введите другую сумму");
-        else {
-            updateStorage(delivery, storage);
+
+        if (amount == 0) {
+            updateStorage(delivery, cassettes);
             return delivery;
         }
+        else
+            throw new IllegalArgumentException("Введите другую сумму");
     }
 
-    private int getCurrentSum() {
+    @Override
+    public Set<Banknotes> takeMoney(int amount) {
+        if (isMoneyEnough(amount))
+            return createBundleForDeliver(amount);
+        throw new IllegalArgumentException("Сумма превышает допустимую");
+    }
+
+    private void updateStorage(Set<Banknotes> delivery, Set<Banknotes> cassettes) {
+        Set<Banknotes>tempStorage = new TreeSet<>();
+        delivery.toArray();
+        cassettes.toArray();
+
+        for(Banknotes beforeDelivery : cassettes) {
+            for (Banknotes removed : delivery) {
+                if (beforeDelivery.equals(removed)) {
+                    int amount = beforeDelivery.getAmount() - removed.getAmount();
+                    tempStorage.add(new BanknotesImpl(beforeDelivery.getValue(), amount));
+                }
+            }
+        }
+        this.cassettes = tempStorage;
+    }
+
+    @Override
+    public int getCurrentSum() {
         int currentSum = 0;
 
-        for (Banknotes banknotes : storage)
+        for (Banknotes banknotes : cassettes)
             currentSum += banknotes.getValue().getValue() * banknotes.getAmount();
         return currentSum;
     }
 
-    public void updateStorage(Set<Banknotes> delivery, Set<Banknotes> storage) {
-        Set<Banknotes>newStorage = new TreeSet<>();
-        delivery.toArray();
-        storage.toArray();
-
-        for(Banknotes source : storage) {
-            for (Banknotes removed : delivery) {
-                if (source.equals(removed)) {
-                    int amount = source.getAmount() - removed.getAmount();
-                    newStorage.add(new BanknotesImpl(source.getValue(), amount));
-                }
-            }
-        }
-        StorageImpl.storage = newStorage;
-        System.out.println("Остаток: " + getCurrentSum());
+    private boolean isMoneyEnough(int amount) {
+        return amount <= getCurrentSum();
     }
 }

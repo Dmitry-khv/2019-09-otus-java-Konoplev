@@ -1,24 +1,14 @@
 package ru.otus.atm;
 
-import java.util.*;
+import java.util.Objects;
 
 public class BanknotesImpl implements Banknotes {
     private final Value value;
     private int amount;
-    static StorageImpl storage = new StorageImpl();
 
     BanknotesImpl(Value value, int amount) {
         this.value = value;
         this.amount = amount;
-    }
-
-    @Override
-    public void putToStorage() {
-        storage.putToStorage(this);
-    }
-
-    public static Set<Banknotes> getFromStorage(int amount) {
-        return storage.getFromStorage(amount);
     }
 
     @Override

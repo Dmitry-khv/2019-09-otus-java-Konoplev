@@ -1,8 +1,6 @@
 package ru.otus.atm;
 
-
-public interface Banknotes extends Comparable<Banknotes>{
-    void putToStorage();
+public interface Banknotes extends Comparable<Banknotes> {
     Value getValue();
     int getAmount();
 }
