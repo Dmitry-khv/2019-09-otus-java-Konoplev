@@ -7,12 +7,12 @@ Dmitry Konoplev (Дмитрий Коноплев)
 email: konoplev88@mail.ru
 <hr>
 
-[***hw01 - maven***](https://github.com/Dmitry-khv/2019-09-otus-java-konoplev/tree/master/hw01-maven) - создание проекта с модульной структурой, с добавлением зависмостей.
+[1. Подготовка к курсу](https://github.com/Dmitry-khv/2019-09-otus-java-konoplev/tree/master/hw01-maven)
 
-[***hw02 - generics***](https://github.com/Dmitry-khv/2019-09-otus-java-konoplev/tree/master/hw02-generics) - DIY ArrayList
+[2. DIY ArrayList](https://github.com/Dmitry-khv/2019-09-otus-java-konoplev/tree/master/hw02-generics)
 
-[***hw-04 - al***](https://github.com/Dmitry-khv/2019-09-otus-java-konoplev/tree/master/hw04-al) - логирование при помощи аннотаций
+[4. Автомагическое логирование](https://github.com/Dmitry-khv/2019-09-otus-java-konoplev/tree/master/hw04-al) - логирование при помощи аннотаций
 
-[***hw-05 - test_framework***](https://github.com/Dmitry-khv/2019-09-otus-java-konoplev/tree/master/hw05-test_framework) - свой тестовый фреймворк
+[5. Свой тестовый фреймвор](https://github.com/Dmitry-khv/2019-09-otus-java-konoplev/tree/master/hw05-test_framework) - свой тестовый фреймворк
 
-[***hw-06 - ATM***](https://github.com/Dmitry-khv/2019-09-otus-java-konoplev/tree/master/hw06-atm) - эмулятр банкомата
+[6. Эмулятор банкомата](https://github.com/Dmitry-khv/2019-09-otus-java-konoplev/tree/master/hw06-atm) - эмулятр банкомата
