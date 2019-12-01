@@ -4,6 +4,6 @@ import atm.ATM;
 import atm.Banknotes;
 
 public interface ATMBuilder {
-    void setBanknotes(Banknotes banknotes);
+    void setBanknotes(Banknotes...banknotes);
     ATM getNewATM();
 }

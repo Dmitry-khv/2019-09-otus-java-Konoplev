@@ -1,8 +1,10 @@
 package atm;
 
+import atm_departmen.Memento;
+
 import java.util.*;
 
-public class ATMImpl implements ATM {
+public class ATMImpl implements ATM, Cloneable {
     private Set<Banknotes> cassettes;
 
     public ATMImpl(Set<Banknotes> givenCassettes) {
@@ -10,18 +12,20 @@ public class ATMImpl implements ATM {
     }
 
     @Override
-    public void putToCassette(Banknotes newBanknote) {
-        int amountOfNewBanknote = newBanknote.getAmount();
-        Iterator<Banknotes> oldBanknotes = cassettes.iterator();
-        while (oldBanknotes.hasNext()) {
-            Banknotes oldBanknote = oldBanknotes.next();
-            if (oldBanknote.equals(newBanknote)) {
-                amountOfNewBanknote += oldBanknote.getAmount();
-                oldBanknotes.remove();
-                break;
+    public void putToCassette(Banknotes...newBanknotes) {
+        for (Banknotes banknote : newBanknotes) {
+            int amountOfNewBanknote = banknote.getAmount();
+            Iterator<Banknotes> oldBanknotes = cassettes.iterator();
+            while (oldBanknotes.hasNext()) {
+                Banknotes oldBanknote = oldBanknotes.next();
+                if (oldBanknote.equals(banknote)) {
+                    amountOfNewBanknote += oldBanknote.getAmount();
+                    oldBanknotes.remove();
+                    break;
+                }
             }
+            cassettes.add(new Rub(banknote.getValue(), amountOfNewBanknote));
         }
-        cassettes.add(new Rub(newBanknote.getValue(), amountOfNewBanknote));
     }
 
     private Set<Banknotes> createBundleForDeliver(int amount) {
@@ -84,7 +88,7 @@ public class ATMImpl implements ATM {
     }
 
     @Override
-    public int getCurrentBalance() {
+    public Integer getCurrentBalance() {
         int currentSum = 0;
 
         for (Banknotes banknotes : cassettes)
@@ -94,11 +98,20 @@ public class ATMImpl implements ATM {
 
     @Override
     public ATM clone() {
-        Set<Banknotes>firstStateSet = new TreeSet<>(cassettes);
-        return new ATMImpl(firstStateSet);
+        Set<Banknotes> cassettesCopy = new TreeSet<>(cassettes);
+        return new ATMImpl(cassettesCopy);
+    }
+
+    @Override
+    public Memento saveState() {
+        return new Memento(clone());
     }
 
     private boolean isMoneyEnough(int amount) {
         return amount <= getCurrentBalance();
+    }
+
+    public void restore(Set<Banknotes>old) {
+        cassettes = old;
     }
 }

@@ -1,10 +1,13 @@
 package atm;
 
+import atm_departmen.Memento;
+
 import java.util.Set;
 
-public interface ATM {
-    void putToCassette(Banknotes banknotes);
+public interface ATM extends Listener{
+    void putToCassette(Banknotes...banknotes);
     Set<Banknotes> takeMoney(int amount);
-    int getCurrentBalance();
+    Integer getCurrentBalance();
     ATM clone();
+   Memento saveState();
 }
