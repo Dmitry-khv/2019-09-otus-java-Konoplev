@@ -16,3 +16,5 @@ email: konoplev88@mail.ru
 5. [Свой тестовый фреймвор;](https://github.com/Dmitry-khv/2019-09-otus-java-konoplev/tree/master/hw05-test_framework)
 
 6. [Эмулятор банкомата;](https://github.com/Dmitry-khv/2019-09-otus-java-konoplev/tree/master/hw06-atm)
+
+7. [Департамент ATM;](https://github.com/Dmitry-khv/2019-09-otus-java-konoplev/tree/master/hw07-atm_department)
