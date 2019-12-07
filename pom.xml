@@ -15,6 +15,7 @@
         <module>hw05-test_framework</module>
         <module>hw06-atm</module>
         <module>hw07-atm_department</module>
+        <module>hw08-myJson</module>
     </modules>
 
     <properties>

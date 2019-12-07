@@ -2,44 +2,40 @@ package ru.otus.json;
 
 import java.lang.reflect.Array;
 import java.lang.reflect.Field;
-import java.lang.reflect.Type;
-import java.util.Collections;
-import java.util.Iterator;
 import java.util.List;
 
 public class MyJson {
-    private StringBuilder stringBuilder = new StringBuilder();
-    private String className;
+    private StringBuilder stringBuilder;
 
-    public String toJson(Person object) throws IllegalAccessException {
+    public String toJson(Person object) {
+        stringBuilder = new StringBuilder();
+        Field[] fields;
+        try {
+            fields = object.getClass().getDeclaredFields();
+        } catch (NullPointerException e) {
+            return null;
+        }
 
-        Class<?> myClass = object.getClass();
         stringBuilder.append("{");
 
-        Field[] fields = myClass.getDeclaredFields();
         for (Field field : fields) {
             field.setAccessible(true);
-            navigateTree(field, object);
-//            stringBuilder.append("\"").append(field.getName()).append("\"").append(":").append(field.get(object)).append(",");
-
+            try {
+                Object fieldValue = field.get(object);
+                if (fieldValue != null) {
+                    stringBuilder.append("\"").append(field.getName()).append("\":");
+                    navigateTree(fieldValue);
+                }
+            } catch (IllegalAccessException e) {
+            }
         }
         stringBuilder.deleteCharAt(stringBuilder.length() - 1);
         stringBuilder.append("}");
-        System.out.println(fields.toString());
         return stringBuilder.toString();
-
     }
 
-    private void navigateTree(Field field, Object object) {
-        Object fieldValue;
-        try {
-            fieldValue = field.get(object);
-        } catch (IllegalAccessException e) {
-            return;
-        }
+    private void navigateTree(Object fieldValue) {
         Class fieldType = fieldValue.getClass();
-        stringBuilder.append("\"")
-                .append(field.getName()).append("\":");
 
         if (fieldType.equals(Boolean.class)) {
             primitiveHandling(fieldValue);
@@ -52,52 +48,22 @@ public class MyJson {
         } else if (fieldType.isArray()) {
             int lengthArray = Array.getLength(fieldValue);
             stringBuilder.append("[");
-            if (fieldType.getComponentType().isPrimitive()) {
-                for (int i = 0; i < lengthArray; i++) {
-                    Object element = Array.get(fieldValue, i);
-                    primitiveHandling(element);
-                }
-            } else {
-                for (int i = 0; i < lengthArray; i++) {
-                    Object element = Array.get(fieldValue, i);
-                    notPrimitivesHandling(element);
-                }
+            for (int i = 0; i < lengthArray; i++) {
+                Object element = Array.get(fieldValue, i);
+                navigateTree(element);
             }
-            stringBuilder.deleteCharAt(stringBuilder.length() - 1);
+            if (stringBuilder.codePointAt(stringBuilder.length() - 1) == ',')
+                stringBuilder.deleteCharAt(stringBuilder.length() - 1);
             stringBuilder.append("],");
-        }
-
-        else if (field.getType().isAssignableFrom(List.class)) {
-            System.out.println(field.getGenericType().getClass().getTypeName()+"\n");
+        } else if (fieldValue instanceof List) {
             stringBuilder.append("[");
-            System.out.println(field.getGenericType());
             List<?> list = (List<?>) fieldValue;
-
-
-
-            if (!field.getGenericType().getClass().isPrimitive()) {
-                stringBuilder.append(field.getGenericType());
+            for (Object elementList : list) {
+                navigateTree(elementList);
             }
-//            if (field.getGenericType().getClass().isPrimitive())
-//                List<Object> list = (List<Object>) field.get(object);
-//                for (int i = 0; i < lengthArray; i++) {
-//                    Object element = Array.get(fieldValue, i);
-//                    primitiveHandling(element);
-//                }
-//
-//
-//            if (field.getType()) {
-//                for (int i = 0; i < lengthList; i++) {
-//                    Object element = Array.get(fieldValue, i);
-//                    primitiveHandling(element);
-//                }
-//            } else {
-//                for (int i = 0; i < lengthList; i++) {
-//                    Object element = Array.get(fieldValue, i);
-//                    notPrimitivesHandling(element);
-//                }
-//            }
-
+            if (stringBuilder.codePointAt(stringBuilder.length() - 1) == ',')
+                stringBuilder.deleteCharAt(stringBuilder.length() - 1);
+            stringBuilder.append("],");
         }
     }
 
@@ -111,5 +77,4 @@ public class MyJson {
                 .append(fieldValue)
                 .append("\",");
     }
-
 }

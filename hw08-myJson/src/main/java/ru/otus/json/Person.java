@@ -3,6 +3,7 @@ package ru.otus.json;
 import java.util.*;
 
 public class Person {
+    private static int ID;
     private final String firstName;
     private final String lastName;
     private int age;
