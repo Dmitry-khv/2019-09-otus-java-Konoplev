@@ -3,15 +3,16 @@ package ru.otus.json;
 import java.util.*;
 
 public class Person {
-    private static int ID;
+    private static final int ID = 20123456;
     private final String firstName;
     private final String lastName;
-    private int age;
-    private final char aChar;
-    private final boolean isMale;
+    private Integer age;
+    private final Character aChar;
+    private final Boolean isMale;
     private List<String> phoneBook = new ArrayList<>();
     private int[] numbers;
     private String[] family;
+    private List<Car> cars = new ArrayList<>();
 
 
     public Person(String firstName, String lastName, int age, char aChar, boolean isMale) {
@@ -30,6 +31,9 @@ public class Person {
     public void addNumbers(int...number) {
         this.numbers = Arrays.copyOf(number, number.length);
     }
+    public void addCar(Car...car) {
+        cars.addAll(Arrays.asList(car));
+    }
 
     @Override
     public String toString() {
@@ -37,8 +41,12 @@ public class Person {
                 "firstName='" + firstName + '\'' +
                 ", lastName='" + lastName + '\'' +
                 ", age=" + age +
+                ", aChar=" + aChar +
+                ", isMale=" + isMale +
                 ", phoneBook=" + phoneBook +
+                ", numbers=" + Arrays.toString(numbers) +
                 ", family=" + Arrays.toString(family) +
+                ", cars=" + cars +
                 '}';
     }
 
