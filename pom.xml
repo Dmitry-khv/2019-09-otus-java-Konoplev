@@ -16,6 +16,7 @@
         <module>hw06-atm</module>
         <module>hw07-atm_department</module>
         <module>hw08-myJson</module>
+        <module>hw09-MyORM</module>
     </modules>
 
     <properties>
