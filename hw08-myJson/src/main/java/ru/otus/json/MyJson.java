@@ -6,36 +6,41 @@ import java.lang.reflect.Modifier;
 import java.util.*;
 
 public class MyJson {
-    private StringBuilder stringBuilder = new StringBuilder();
     private final Set<Object> primitiveTypes = getPrimitiveTypes();
 
     private static Set<Object> getPrimitiveTypes() {
         return new HashSet<>(Arrays.asList(Boolean.class,
-                Integer.class, Double.class, Float.class, Byte.class, Long.class, Short.class));
+                Integer.class, Double.class, Float.class, Byte.class, Long.class, Short.class, Character.class));
     }
 
     public String toJson(Object object) {
         if (object == null)
             return null;
+        return generateString(object);
+    }
+
+    public String generateString(Object object) {
+        StringBuilder stringBuilder = new StringBuilder();
         if (isObject(object)) {
             stringBuilder.append("{");
             Field[] fields = object.getClass().getDeclaredFields();
+            int count = 0;
             for (Field field : fields) {
+                count++;
                 try {
                     Object fieldValue = getFieldValue(field, object);
                     if (fieldValue != null) {
                         stringBuilder.append("\"").append(field.getName()).append("\":");
-                        navigateTree(fieldValue);
+                        stringBuilder.append(processObject(fieldValue));
+                        if(count < fields.length)
+                            stringBuilder.append(",");
                     }
                 } catch (IllegalAccessException | NullPointerException e) {
                 }
             }
-            checkLastComma();
             stringBuilder.append("}");
         } else {
-            stringBuilder = new StringBuilder();
-            navigateTree(object);
-            checkLastComma();
+            stringBuilder.append(processObject(object));
         }
         return stringBuilder.toString();
     }
@@ -49,57 +54,47 @@ public class MyJson {
         return fieldValue;
     }
 
-    private void navigateTree(Object fieldValue) {
-        if (fieldValue.getClass().isPrimitive() || primitiveTypes.contains(fieldValue.getClass())) {
-            splitUpWithComma(fieldValue);
-        } else if (fieldValue.getClass().equals(String.class) || fieldValue.getClass().equals(Character.class)) {
-            splitUpWithQuotes(fieldValue);
+    private String processObject(Object fieldValue) {
+        StringBuilder stringBuilder = new StringBuilder();
+        if (fieldValue.getClass().equals(String.class) || fieldValue.getClass().equals(Character.class)) {
+            stringBuilder.append("\"")
+                    .append(fieldValue)
+                    .append("\"");
+            return stringBuilder.toString();
+        } else if (fieldValue.getClass().isPrimitive() || primitiveTypes.contains(fieldValue.getClass())) {
+            return stringBuilder.append(fieldValue).toString();
         } else if (fieldValue.getClass().isArray()) {
             stringBuilder.append("[");
             int lengthArray = Array.getLength(fieldValue);
             for (int i = 0; i < lengthArray; i++) {
                 Object element = Array.get(fieldValue, i);
-                navigateTree(element);
+                stringBuilder.append(processObject(element));
+                if (i < lengthArray-1)
+                    stringBuilder.append(",");
             }
-            checkLastComma();
-            stringBuilder.append("],");
-        } else if (fieldValue instanceof List) {
+            stringBuilder.append("]");
+            return stringBuilder.toString();
+        } else if (fieldValue instanceof Collection) {
             stringBuilder.append("[");
-            List<?> list = (List<?>) fieldValue;
-            for (Object element : list) {
-                navigateTree(element);
+            Collection<?> list = (Collection<?>) fieldValue;
+            Iterator iterator = list.iterator();
+            while (iterator.hasNext()) {
+                stringBuilder.append(processObject(iterator.next()));
+                if (iterator.hasNext())
+                    stringBuilder.append(",");
             }
-
-            checkLastComma();
-            stringBuilder.append("],");
+            stringBuilder.append("]");
+            return stringBuilder.toString();
         } else {
-            toJson(fieldValue);
-            stringBuilder.append(",");
+            return stringBuilder.append(toJson(fieldValue)).toString();
         }
-    }
-
-    public void splitUpWithComma(Object fieldValue) {
-        stringBuilder.append(fieldValue)
-                .append(",");
-    }
-
-    public void splitUpWithQuotes(Object fieldValue) {
-        stringBuilder.append("\"")
-                .append(fieldValue)
-                .append("\",");
     }
 
     private boolean isObject(Object object) {
         return !object.getClass().isPrimitive()
                 && !primitiveTypes.contains(object.getClass())
-                && !object.getClass().equals(Character.class)
                 && !object.getClass().equals(String.class)
                 && (!object.getClass().isArray()
                 && !(object instanceof List));
-    }
-
-    public void checkLastComma() {
-        if (stringBuilder.codePointAt(stringBuilder.length() - 1) == ',')
-            stringBuilder.deleteCharAt(stringBuilder.length() - 1);
     }
 }
