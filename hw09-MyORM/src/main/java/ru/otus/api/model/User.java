@@ -4,17 +4,17 @@ import ru.otus.api.annotations.Id;
 
 public class User {
     @Id
-    private final int id;
+    private final long id;
     private final String name;
     private int age;
 
-    public User(int id, String name, int age) {
+    public User(long id, String name, int age) {
         this.id = id;
         this.name = name;
         this.age = age;
     }
 
-    public int getId() {
+    public long getId() {
         return id;
     }
 
@@ -30,7 +30,8 @@ public class User {
     public String toString() {
         return "User{" +
                 "id=" + id +
-                ", name='" + name +
-                "' , age=" + age + "}";
+                ", name='" + name + '\'' +
+                ", age=" + age +
+                '}';
     }
 }
