@@ -1,5 +1,7 @@
 package ru.otus.api.service;
 
+import ru.otus.api.dao.ModelDao;
+
 import java.util.Optional;
 
 public interface DBService {

@@ -1,14 +1,17 @@
 package ru.otus.api.model;
 
-public class Account {
-    private final long no;
+public class Account implements Model{
+    private long no;
     private final String type;
-    private final double number;
+    private double number;
 
-    public Account(long no, String type, double number) {
-        this.no = no;
+    public Account(String type, double number) {
         this.type = type;
         this.number = number;
+    }
+
+    public void setNo(long no) {
+        this.no = no;
     }
 
     public long getNo() {
@@ -21,6 +24,10 @@ public class Account {
 
     public double getNumber() {
         return number;
+    }
+
+    public void setNumber(double number) {
+        this.number = number;
     }
 
     @Override

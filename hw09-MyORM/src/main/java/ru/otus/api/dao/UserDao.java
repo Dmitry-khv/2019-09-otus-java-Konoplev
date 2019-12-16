@@ -1,12 +1,15 @@
 package ru.otus.api.dao;
 
 import ru.otus.api.model.User;
+import ru.otus.api.sessionmanager.SessionManager;
 
 import java.util.Optional;
 
-public interface UserDao {
+public interface UserDao extends ModelDao {
     Optional<User> findById(long id);
 
-    void saveUser(User user);
+    long saveUser(User user);
+
+    SessionManager getSessionManager();
 
 }

@@ -2,14 +2,14 @@ package ru.otus.api.model;
 
 import ru.otus.api.annotations.Id;
 
-public class User {
+public class User implements Model{
     @Id
-    private final long id;
+    private long id;
     private final String name;
     private int age;
 
-    public User(long id, String name, int age) {
-        this.id = id;
+
+    public User(String name, int age) {
         this.name = name;
         this.age = age;
     }
@@ -25,6 +25,16 @@ public class User {
     public int getAge() {
         return age;
     }
+
+    public void setId(long id) {
+        this.id = id;
+    }
+
+
+    public void setAge(int age) {
+        this.age = age;
+    }
+
 
     @Override
     public String toString() {

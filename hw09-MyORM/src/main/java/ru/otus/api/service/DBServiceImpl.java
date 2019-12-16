@@ -1,6 +1,5 @@
 package ru.otus.api.service;
 
-import ru.otus.api.dao.UserDao;
 
 import java.util.Optional;
 
