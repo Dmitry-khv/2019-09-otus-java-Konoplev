@@ -1,13 +1,11 @@
 package ru.otus;
 
-import checkers.units.quals.A;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import ru.otus.api.dao.AccountDao;
-import ru.otus.api.dao.ModelDao;
 import ru.otus.api.dao.UserDao;
 import ru.otus.api.model.Account;
-import ru.otus.api.model.Model;
 import ru.otus.api.model.User;
-import ru.otus.api.service.DBServiceImpl;
 import ru.otus.h2.DataSourceH2;
 import ru.otus.h2.Table;
 import ru.otus.jdbc.DbExecutor;
@@ -18,9 +16,9 @@ import ru.otus.jdbc.dao.UserDaoJdbc;
 import ru.otus.jdbc.sessionmanager.SessionManagerJdbc;
 
 import java.sql.SQLException;
-import java.util.Optional;
 
 public class JdbcTemplateDemo {
+    private static Logger logger = LoggerFactory.getLogger(JdbcTemplateDemo.class);
 
     public static void main(String[] args) throws SQLException {
         DataSourceH2 dataSource = new DataSourceH2();

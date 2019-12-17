@@ -1,24 +1,22 @@
 package ru.otus.jdbc;
 
-import ru.otus.api.dao.ModelDao;
-import ru.otus.api.model.Model;
 import ru.otus.api.service.DBService;
 import ru.otus.api.service.DBServiceImpl;
 import ru.otus.orm.ClassHandler;
 
-public class JdbcTemplateImpl<T extends ModelDao> implements JdbcTemplate {
+public class JdbcTemplateImpl<T> implements JdbcTemplate {
     private final DBService dbService;
-
     private final ClassHandler classHandler;
 
     public JdbcTemplateImpl(T object) {
-        classHandler = new ClassHandler();
+        classHandler = new ClassHandler(object);
         dbService = new DBServiceImpl<>(object);
     }
 
     @Override
     public void create(Object objectData) {
-
+        classHandler.generateQuery();
+        classHandler.getParamList();
     }
 
     @Override

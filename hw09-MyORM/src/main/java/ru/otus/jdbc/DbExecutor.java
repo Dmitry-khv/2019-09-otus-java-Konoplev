@@ -1,5 +1,7 @@
 package ru.otus.jdbc;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import ru.otus.api.model.Model;
 
 import java.sql.*;
@@ -8,6 +10,8 @@ import java.util.Optional;
 import java.util.function.Function;
 
 public class DbExecutor<T> {
+    private static Logger logger = LoggerFactory.getLogger(DbExecutor.class);
+
     public long insertRecord(Connection connection, String sql, List<String> param) throws SQLException {
         Savepoint savepoint = connection.setSavepoint();
         try(PreparedStatement pst = connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
