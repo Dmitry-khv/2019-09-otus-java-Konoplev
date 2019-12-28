@@ -1,8 +1,8 @@
 package ru.otus.test;
 
-import ru.otus.annotation.After;
-import ru.otus.annotation.Before;
-import ru.otus.annotation.Test;
+import ru.otus.api.annotation.After;
+import ru.otus.api.annotation.Before;
+import ru.otus.api.annotation.Test;
 
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
