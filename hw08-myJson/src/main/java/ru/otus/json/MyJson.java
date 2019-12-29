@@ -74,7 +74,7 @@ public class MyJson {
             }
             stringBuilder.append("]");
             return stringBuilder.toString();
-        } else if (fieldValue instanceof Collection) {
+        } else if (Collection.class.isAssignableFrom(fieldValue.getClass())) {
             stringBuilder.append("[");
             Collection<?> list = (Collection<?>) fieldValue;
             Iterator iterator = list.iterator();
@@ -86,7 +86,7 @@ public class MyJson {
             stringBuilder.append("]");
             return stringBuilder.toString();
         } else {
-           return stringBuilder.append(toJson(fieldValue)).toString();
+            return stringBuilder.append(toJson(fieldValue)).toString();
         }
     }
 
