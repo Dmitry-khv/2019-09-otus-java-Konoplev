@@ -1,110 +1,80 @@
 package ru.otus.jdbc.reflection;
 
-import ru.otus.api.annotation.Id;
-
 import java.lang.reflect.Field;
-import java.lang.reflect.Modifier;
 import java.sql.SQLException;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.HashMap;
+import java.util.Map;
 
 public class SqlGenerator<T> {
 
+    private Field[] fields;
+    private static Map<Class, String> sqlSave = new HashMap<>();
+    private static Map<Class, String> sqlLoad = new HashMap<>();
+    private static Map<Class, String> sqlUpdate = new HashMap<>();
+
     public String save(T obj) {
         //INSERT INTO `table_name`(column_1,column_2,...) VALUES (value_1,value_2,...);
-        var field = new StringBuilder("(");
-        var fieldValues = new StringBuilder("(");
-        List<Object> params = getParams(obj);
+        Class<?> clazz = obj.getClass();
+        if (!sqlSave.containsKey(clazz)) {
+            var field = new StringBuilder("(");
+            var fieldValues = new StringBuilder("(");
 
-        Field[] fields = obj.getClass().getDeclaredFields();
+            fields = ClassHandler.getAllFields(clazz);
 
-        for (int idx = 0; idx < fields.length; idx++) {
-            field.append(fields[idx].getName());
-            fieldValues.append("?");
-            if (idx < fields.length - 1) {
-                field.append(",");
-                fieldValues.append(",");
+            for (int idx = 0; idx < fields.length; idx++) {
+                field.append(fields[idx].getName());
+                fieldValues.append("?");
+                if (idx < fields.length - 1) {
+                    field.append(",");
+                    fieldValues.append(",");
+                }
             }
+            field.append(")");
+            fieldValues.append(")");
+            var sql = new StringBuilder("INSERT INTO ").append(clazz.getSimpleName()).append(field).append(" VALUES ").append(fieldValues);
+            sqlSave.put(clazz, sql.toString());
         }
-        field.append(")");
-        fieldValues.append(")");
-        var sql = new StringBuilder("INSERT INTO ").append(obj.getClass().getSimpleName()).append(field).append(" VALUES ").append(fieldValues);
-        System.out.println(sql);
-        return sql.toString();
+        System.out.println(sqlSave.get(clazz));
+        return sqlSave.get(clazz);
     }
 
-    public String load(Class clazz) {
-        var sql = new StringBuilder("SELECT ");
-        var condition = new StringBuilder();
-        Field[] fields = clazz.getDeclaredFields();
+    public String load(Class<?> clazz) {
+        if(!sqlLoad.containsKey(clazz)) {
+            var sql = new StringBuilder("SELECT ");
+            fields = ClassHandler.getFieldsWithoutIdField(clazz);
 
-        for (int idx = 0; idx < fields.length; idx++) {
-            if (!fields[idx].isAnnotationPresent(Id.class)) {
+            for (int idx = 0; idx < fields.length; idx++) {
                 sql.append(fields[idx].getName());
                 if (idx < fields.length - 1) {
                     sql.append(", ");
                 } else
                     sql.append(" FROM ").append(clazz.getSimpleName());
-            } else {
-                condition.append(" WHERE ");
-                condition.append(fields[idx].getName());
-                condition.append(" = ?");
             }
+            sql.append(" WHERE ").append(ClassHandler.getFieldWithAnnotationId(clazz).getName()).append(" = ?");
+            sqlLoad.put(clazz, sql.toString());
         }
-        sql.append(condition);
-        System.out.println(sql);
-        return sql.toString();
+        System.out.println(sqlLoad.get(clazz));
+        return sqlLoad.get(clazz);
     }
 
     public String update(T obj) throws SQLException {
         //UPDATE `table_name` SET `column_name` = `new_value' [WHERE condition];
+        Class<?> clazz = obj.getClass();
+        if (!sqlUpdate.containsKey(clazz)) {
+            var sql = new StringBuilder("UPDATE ").append(clazz.getSimpleName()).append(" SET ");
+            fields = ClassHandler.getFieldsWithoutIdField(clazz);
 
-        var sql = new StringBuilder("UPDATE ").append(obj.getClass().getSimpleName()).append(" SET ");
-        var condition = new StringBuilder();
-        Field[] fields = obj.getClass().getDeclaredFields();
-
-        for (int idx = 0; idx < fields.length; idx++) {
-            if (!fields[idx].isAnnotationPresent(Id.class)) {
-                sql.append(fields[idx].getName());
-                sql.append(" = ");
-                sql.append("?");
-                if (idx < fields.length - 1) {
-                    sql.append(", ");
+            for (int idx = 0; idx < fields.length; idx++) {
+                    sql.append(fields[idx].getName());
+                    sql.append(" = ");
+                    sql.append("?");
+                    if (idx < fields.length - 1) {
+                        sql.append(", ");
+                    }
                 }
-            } else if (fields[idx].isAnnotationPresent(Id.class)) {
-                condition.append(" WHERE ");
-                condition.append(fields[idx].getName());
-                condition.append(" = ?");
-            }
+            sql.append(" WHERE ").append(ClassHandler.getFieldWithAnnotationId(clazz).getName()).append(" = ?");
+            sqlUpdate.put(clazz, sql.toString());
         }
-        sql.append(condition);
-        System.out.println(sql);
-        return sql.toString();
-    }
-
-    public List<Object> getParams(T objectData) {
-        List<Object> params = new ArrayList<>();
-        Field[] fields = objectData.getClass().getDeclaredFields();
-
-        for (int idx = 0; idx < fields.length; idx++) {
-            if (!fields[idx].isAnnotationPresent(Id.class)) {
-                Object fieldValue = getFieldValue(fields[idx], objectData);
-                params.add(fieldValue);
-            }
-        }
-        return params;
-    }
-
-    public Object getFieldValue(Field field, Object object) {
-        Object fieldValue = null;
-        if (!(Modifier.isStatic(field.getModifiers()) && Modifier.isFinal(field.getModifiers()))) {
-            field.setAccessible(true);
-            try {
-                fieldValue = field.get(object);
-            } catch (IllegalAccessException e) {
-                e.printStackTrace();
-            }
-        }
-        return fieldValue;
+        return sqlUpdate.get(clazz);
     }
 }

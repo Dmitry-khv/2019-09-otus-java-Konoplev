@@ -10,6 +10,7 @@ import ru.otus.api.service.DBServiceUser;
 import ru.otus.api.service.DBServiceUserImpl;
 import ru.otus.h2.DataSourceH2;
 import ru.otus.h2.TableCreator;
+import ru.otus.jdbc.DBExecutor;
 import ru.otus.jdbc.dao.AccountDaoJdbc;
 import ru.otus.jdbc.dao.UserDaoJdbc;
 import ru.otus.jdbc.sessionmanager.SessionManagerJdbc;
@@ -42,6 +43,5 @@ public class Demo {
         System.out.println(newUser.equals(user1));
         System.out.println(newAccount.equals(account1));
         System.out.println(newAccount);
-
     }
 }
