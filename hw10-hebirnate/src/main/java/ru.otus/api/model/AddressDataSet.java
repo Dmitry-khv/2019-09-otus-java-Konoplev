@@ -1,0 +1,36 @@
+package ru.otus.api.model;
+
+import javax.persistence.*;
+
+@Entity
+@Table(name = "address")
+public class AddressDataSet {
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.SEQUENCE)
+    @Column(name = "id", nullable = false, unique = true)
+    private long id;
+
+    @Column(name = "street")
+    private String street;
+
+
+    public AddressDataSet() {
+    }
+
+    public long getId() {
+        return id;
+    }
+
+    public void setId(long id) {
+        this.id = id;
+    }
+
+    public String getStreet() {
+        return street;
+    }
+
+    public void setStreet(String street) {
+        this.street = street;
+    }
+}
