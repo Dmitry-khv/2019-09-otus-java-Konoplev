@@ -32,13 +32,13 @@ public class DbServiceDemo {
     dbServiceUser.saveUser(new User(1L, "А! Нет. Это же совсем не Вася"));
     User mayBeUpdatedUser = dbServiceUser.getUser(1);
 
-//    outputUserOptional("Created user", mayBeCreatedUser);
-//    outputUserOptional("Updated user", mayBeUpdatedUser);
-//  }
-//
-//  private static void outputUserOptional(String header, User mayBeUser) {
-//    System.out.println("-----------------------------------------------------------");
-//    System.out.println(header);
-//    mayBeUser.ifPresentOrElse(System.out::println, () -> logger.info("User not found"));
+    outputUser("Created user", mayBeCreatedUser);
+    outputUser("Updated user", mayBeUpdatedUser);
+  }
+
+  private static void outputUser(String header, User mayBeUser) {
+    System.out.println("-----------------------------------------------------------");
+    System.out.println(header);
+    System.out.println(mayBeUser);
   }
 }
