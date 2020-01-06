@@ -18,16 +18,18 @@ public class DBServiceUserImpl implements DBServiceUser {
 
 
     @Override
-    public void saveUser(User user) {
+    public long saveUser(User user) {
         try(SessionManager sessionManager = userDao.getSessionManager()) {
             sessionManager.beginSession();
             try {
                 long userId = userDao.save(user);
                 sessionManager.commitSession();
                 logger.info("created user {}", userId);
+                return userId;
             } catch (Exception e) {
                 logger.error(e.getMessage(), e);
                 sessionManager.rollbackSession();
+                throw new DbServiceException(e);
             }
         }
     }

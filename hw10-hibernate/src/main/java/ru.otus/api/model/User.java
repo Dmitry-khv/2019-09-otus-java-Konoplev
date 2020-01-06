@@ -2,7 +2,8 @@ package ru.otus.api.model;
 
 
 import javax.persistence.*;
-import java.util.Objects;
+import java.util.HashSet;
+import java.util.Set;
 
 @Entity
 @Table(name = "users")
@@ -19,29 +20,21 @@ public class User {
   @Column(name = "age")
   private int age;
 
-//  @Column(name = "address", table = "addresses")
-  @OneToOne(targetEntity = AddressDataSet.class, cascade = {CascadeType.DETACH, CascadeType.MERGE,
-          CascadeType.PERSIST, CascadeType.REFRESH}, fetch = FetchType.EAGER)
+  @OneToOne(targetEntity = AddressDataSet.class, cascade = {CascadeType.MERGE, CascadeType.PERSIST}, fetch = FetchType.EAGER)
   @JoinColumn(name = "address_id")
   private AddressDataSet addressDataSet;
 
-  @OneToOne(targetEntity = PhoneDataSet.class, cascade = CascadeType.ALL, fetch = FetchType.EAGER)
-  @JoinColumn(name = "phone_id")
-  private PhoneDataSet phoneDataSet;
+  @OneToMany(targetEntity = PhoneDataSet.class, cascade = {CascadeType.MERGE, CascadeType.PERSIST}, fetch = FetchType.EAGER)
+  @JoinColumn(name = "user_id", nullable = false)
+  private Set<PhoneDataSet> phoneDataSet = new HashSet<>();
 
   public User() {
   }
 
-  public User(long id, String name) {
+  public User(long id, String name, int age) {
     this.id = id;
     this.name = name;
-  }
-
-  public User(String name, int age, AddressDataSet addressDataSet, PhoneDataSet phoneDataSet) {
-    this.name = name;
     this.age = age;
-    this.addressDataSet = addressDataSet;
-    this.phoneDataSet = phoneDataSet;
   }
 
   public long getId() {
@@ -76,12 +69,12 @@ public class User {
     this.addressDataSet = addressDataSet;
   }
 
-  public PhoneDataSet getPhoneDataSet() {
+  public Set<PhoneDataSet> getPhoneDataSet() {
     return phoneDataSet;
   }
 
-  public void setPhoneDataSet(PhoneDataSet phoneDataSet) {
-    this.phoneDataSet = phoneDataSet;
+  public void setPhoneDataSet(PhoneDataSet phone) {
+    phoneDataSet.add(phone);
   }
 
   @Override

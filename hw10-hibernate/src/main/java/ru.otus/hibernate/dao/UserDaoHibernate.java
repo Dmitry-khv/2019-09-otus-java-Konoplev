@@ -52,14 +52,7 @@ public class UserDaoHibernate implements UserDao {
 
     @Override
     public void update(User user) {
-        DatabaseSessionHibernate currentSession = sessionManagerHibernate.getCurrentSession();
-        try {
-            Session hibernateSession = currentSession.getHibernateSession();
-            hibernateSession.update(user);
-        } catch (Exception e) {
-            logger.error(e.getMessage(), e);
-            throw new UserDaoException(e);
-        }
+        throw new UnsupportedOperationException();
     }
 
     @Override
