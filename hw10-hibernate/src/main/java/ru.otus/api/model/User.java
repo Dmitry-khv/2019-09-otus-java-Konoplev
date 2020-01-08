@@ -25,7 +25,7 @@ public class User {
   private AddressDataSet addressDataSet;
 
   @OneToMany(targetEntity = PhoneDataSet.class, cascade = {CascadeType.MERGE, CascadeType.PERSIST}, fetch = FetchType.EAGER)
-  @JoinColumn(name = "user_id", nullable = false)
+  @JoinColumn(name = "user_id", nullable = false, updatable = false)
   private Set<PhoneDataSet> phoneDataSet = new HashSet<>();
 
   public User() {

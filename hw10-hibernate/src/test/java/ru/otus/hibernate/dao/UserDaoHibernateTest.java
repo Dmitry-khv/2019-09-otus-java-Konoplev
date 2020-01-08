@@ -48,7 +48,7 @@ class UserDaoHibernateTest {
     }
 
     @Test
-    @DisplayName("корректно сохранять и загружать пользователя")
+    @DisplayName("корректно сохранять и загружать пользователя со связями с другими сущностями")
     public void shouldCorrectSaveAndLoadUser(){
         long id = serviceUser.saveUser(user);
         assertThat(id).isEqualTo(USER_ID);
