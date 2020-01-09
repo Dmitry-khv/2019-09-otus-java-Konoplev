@@ -17,7 +17,7 @@
         <module>hw07-atm_department</module>
         <module>hw08-myJson</module>
         <module>hw09-jdbc</module>
-        <module>hw10-hebirnate</module>
+        <module>hw10-hibernate</module>
     </modules>
 
     <properties>
