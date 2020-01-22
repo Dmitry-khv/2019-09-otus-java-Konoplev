@@ -12,15 +12,14 @@ import ru.otus.cachehw.hibernate.api.sessionmanager.SessionManager;
 
 public class DBServiceUserImpl implements DBServiceUser {
     private static Logger logger = LoggerFactory.getLogger(DBServiceUserImpl.class);
-    private final MyCache<String, User> cache = new MyCache<>();
+    private final MyCache<String, User> cache;
     private final UserDao userDao;
-    private final HwListener<String, User> listener =
-            (key, value, action) -> logger.info("key:{}, value:{}, action: {}", key, value, action);
 
 
-    public DBServiceUserImpl(UserDao userDao) {
+
+    public DBServiceUserImpl(UserDao userDao, MyCache<String, User> cache) {
         this.userDao = userDao;
-        cache.addListener(listener);
+        this.cache = cache;
     }
 
 
@@ -68,6 +67,7 @@ public class DBServiceUserImpl implements DBServiceUser {
                 User user = userDao.findById(id);
                 sessionManager.commitSession();
                 logger.info("Got user {} ", id);
+                cache.put(String.valueOf(user.getId()), user);
                 return user;
             } catch (Exception e) {
                 logger.error(e.getMessage(), e);

@@ -1,6 +1,10 @@
 package ru.otus.cachehw;
 
 import org.hibernate.SessionFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import ru.otus.cachehw.cache.HwListener;
+import ru.otus.cachehw.cache.MyCache;
 import ru.otus.cachehw.hibernate.api.dao.UserDao;
 import ru.otus.cachehw.hibernate.api.model.AddressDataSet;
 import ru.otus.cachehw.hibernate.api.model.PhoneDataSet;
@@ -15,6 +19,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class CacheDemo {
+    private static Logger logger = LoggerFactory.getLogger(CacheDemo.class);
+
     private static final String HIBERNATE_CONFIG = "hibernate.cfg.xml";
     private static final long USER_ID = 1L;
     private List<Long> id = new ArrayList<>();
@@ -35,7 +41,11 @@ public class CacheDemo {
         sessionFactory = HibernateUtils.buildSessionFactory(HIBERNATE_CONFIG, User.class, AddressDataSet.class, PhoneDataSet.class);
         sessionManager = new SessionManagerHibernate(sessionFactory);
         userDao = new UserDaoHibernate(sessionManager);
-        serviceUser = new DBServiceUserImpl(userDao);
+        MyCache<String, User> cache = new MyCache<>();
+        HwListener<String, User> listener =
+                (key, value, action) -> logger.info("key:{}, value:{}, action: {}", key, value, action);
+        cache.addListener(listener);
+        serviceUser = new DBServiceUserImpl(userDao, cache);
     }
 
     private void run() {
@@ -50,7 +60,7 @@ public class CacheDemo {
             long startTime = System.nanoTime();
             User user = serviceUser.getUser(id.get(idx));
             long endTime = System.nanoTime();
-            System.out.println("Time of getting user = " + (endTime - startTime));
+            System.out.println("User receipt time = " + (endTime - startTime));
         }
     }
 }

@@ -50,7 +50,11 @@ public class MyCache<K, V> implements HwCache<K, V> {
 
   private void notify(K key, V value, String msg) {
     for (WeakReference<HwListener<K, V>> weakReference : listeners) {
-      Objects.requireNonNull(weakReference.get()).notify(key, value, msg);
+      try {
+        Objects.requireNonNull(weakReference.get()).notify(key, value, msg);
+      } catch (Exception e) {
+        logger.info("There is something wrong with listener");
+      }
     }
   }
 
