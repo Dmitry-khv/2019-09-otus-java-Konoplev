@@ -76,10 +76,4 @@ public class DBServiceUserImpl implements DBServiceUser {
             }
         }
     }
-
-    public void addCacheListener() {
-        HwListener<String, User> listener =
-                (key, value, action) -> logger.info("key:{}, value:{}, action: {}", key, value, action);
-        cache.addListener(listener);
-    }
 }

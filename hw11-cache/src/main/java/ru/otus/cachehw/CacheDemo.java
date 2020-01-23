@@ -45,6 +45,7 @@ public class CacheDemo {
         HwListener<String, User> listener =
                 (key, value, action) -> logger.info("key:{}, value:{}, action: {}", key, value, action);
         cache.addListener(listener);
+        cache.addListener(null);
         serviceUser = new DBServiceUserImpl(userDao, cache);
     }
 
