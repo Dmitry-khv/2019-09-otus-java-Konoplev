@@ -17,7 +17,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 @DisplayName("Сервис для работы с User должен уметь ")
 class UserDaoHibernateTest {
-    private static final String HIBERNATE_CONFIG = "hibernate-test.cfg.xml";
+    private static final String HIBERNATE_CONFIG = "hibernate.cfg.xml";
     private static final long USER_ID = 1L;
 
     private User user;

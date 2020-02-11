@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>admin</title>
+</head>
+
+<body>
+
+<h2>Страница администратора</h2>
+
+<form action="/admin" method="post">
+    <p>
+        <input type="submit" name="getUsers" value="Показать список пользователей">
+    </p>
+
+</form>
+
+<h4>Список пользователей</h4>
+<table style="width: 400px">
+    <thead>
+    <tr>
+        <td style="width: 50px">Id</td>
+        <td style="width: 150px">Имя</td>
+        <td style="width: 100px">Логин</td>
+        <td style="width: 100px">Пароль</td>
+    </tr>
+    </thead>
+    <#list usersList as user>
+    <tbody>
+    <tr>
+        <td>${user.id}</td>
+        <td>${user.name}</td>
+        <td>${user.login}</td>
+        <td>${user.password}</td>
+    </tr>
+    </tbody>
+</#list>
+</table>
+
+<p>&nbsp;</p>
+
+<form action="/admin" method="post">
+
+    <p>Добавить пользователя</p>
+
+    <p><input name="name" required="required" type="text" placeholder="Имя"/></p>
+
+    <p><input name="age" required="required" type="number" placeholder="Возраст"/></p>
+
+    <p><input name="login" required="required" type="text" placeholder="Логин" /></p>
+
+    <p><input name="password" required="required" type="text" placeholder="Пароль" /></p>
+
+    <p><input name="address" type="text" placeholder="Адресс"/></p>
+
+    <p><input name="phone" type="text" placeholder="Телефон"/></p>
+
+    <p><select name="role" required="required"><option value="admin">Admin</option><option value="user">User</option></select></p>
+
+    <p><input name="addUser" type="submit" value="Добавить пользователя" /></p>
+
+</form>
+
+<form action="/admin" method="post">
+    <input name="exit" type="submit" value="Выход">
+</form>
+
+
+</body>
+</html>
+</html>
