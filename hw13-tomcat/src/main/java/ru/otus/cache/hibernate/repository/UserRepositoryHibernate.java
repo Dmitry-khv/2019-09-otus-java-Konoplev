@@ -1,10 +1,10 @@
-package ru.otus.cache.hibernate.dao;
+package ru.otus.cache.hibernate.repository;
 
 import org.hibernate.Session;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import ru.otus.cache.api.dao.UserDao;
-import ru.otus.cache.api.dao.UserDaoException;
+import ru.otus.cache.api.repository.UserRepository;
+import ru.otus.cache.api.repository.UserRepositoryException;
 import ru.otus.cache.api.model.User;
 import ru.otus.cache.api.sessionmanager.SessionManager;
 import ru.otus.cache.hibernate.sessionmanager.DatabaseSessionHibernate;
@@ -17,12 +17,12 @@ import javax.persistence.criteria.Root;
 import java.util.List;
 
 
-public class UserDaoHibernate implements UserDao {
-    private static Logger logger = LoggerFactory.getLogger(UserDaoHibernate.class);
+public class UserRepositoryHibernate implements UserRepository {
+    private static Logger logger = LoggerFactory.getLogger(UserRepositoryHibernate.class);
 
     private final SessionManagerHibernate sessionManagerHibernate;
 
-    public UserDaoHibernate(SessionManagerHibernate sessionManagerHibernate) {
+    public UserRepositoryHibernate(SessionManagerHibernate sessionManagerHibernate) {
         this.sessionManagerHibernate = sessionManagerHibernate;
     }
 
@@ -39,7 +39,7 @@ public class UserDaoHibernate implements UserDao {
             return user.getId();
         } catch (Exception e) {
             logger.error(e.getMessage(), e);
-            throw new UserDaoException(e);
+            throw new UserRepositoryException(e);
         }
     }
 
@@ -52,7 +52,7 @@ public class UserDaoHibernate implements UserDao {
             return user;
         } catch (Exception e) {
             logger.error(e.getMessage(), e);
-            throw new UserDaoException(e);
+            throw new UserRepositoryException(e);
         }
     }
 
@@ -81,7 +81,7 @@ public class UserDaoHibernate implements UserDao {
 //            return hibernateSession.createQuery("SELECT * form User", User.class).getResultList();
         } catch (Exception e) {
             logger.error(e.getMessage(), e);
-            throw new UserDaoException(e);
+            throw new UserRepositoryException(e);
         }
     }
 
