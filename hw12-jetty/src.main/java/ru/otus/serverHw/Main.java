@@ -79,7 +79,7 @@ public class Main {
         serviceUser.saveUser(admin);
     }
 
-    public static String staticDirPath(String fileOrResourceName) {
+    public String staticDirPath(String fileOrResourceName) {
         return Optional.ofNullable(FileSystemHelper.class.getClassLoader().getResource(fileOrResourceName))
                 .orElseThrow(() -> new RuntimeException(String.format("File \"%s\" not found", fileOrResourceName))).toExternalForm();
     }

@@ -29,18 +29,7 @@ public class AdminServlet extends HttpServlet {
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        Map<String, Object> pageParams = new HashMap<>();
-        pageParams.put(USERS_LIST_PARAM, Collections.emptyList());
-        pageParams.put(CREATED_USER_PARAM, Collections.emptyList());
 
-        resp.setContentType("text/html");
-        resp.getWriter().println(templateProcessor.getPage(ADMIN_PAGE_TEMPLATE, pageParams));
-        resp.setStatus(HttpServletResponse.SC_OK);
-    }
-
-    @Override
-    protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-         // получить список пользователей
         if(req.getParameter("getUsers") != null) {
             Map<String, Object> params = new HashMap<>();
             params.put(USERS_LIST_PARAM, serviceUser.getUserList());
@@ -48,7 +37,23 @@ public class AdminServlet extends HttpServlet {
             resp.setContentType("text/html");
             resp.getWriter().println(templateProcessor.getPage(ADMIN_PAGE_TEMPLATE, params));
             resp.setStatus(HttpServletResponse.SC_OK);
-        } if (req.getParameter("addUser") != null) {
+        } else {
+
+            Map<String, Object> pageParams = new HashMap<>();
+            pageParams.put(USERS_LIST_PARAM, Collections.emptyList());
+            pageParams.put(CREATED_USER_PARAM, Collections.emptyList());
+
+            resp.setContentType("text/html");
+            resp.getWriter().println(templateProcessor.getPage(ADMIN_PAGE_TEMPLATE, pageParams));
+            resp.setStatus(HttpServletResponse.SC_OK);
+        }
+    }
+
+
+
+    @Override
+    protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+         if (req.getParameter("addUser") != null) {
             User createdUser = new User();
             createdUser.setName(req.getParameter("name"));
             createdUser.setAge(Integer.parseInt(req.getParameter("age")));
