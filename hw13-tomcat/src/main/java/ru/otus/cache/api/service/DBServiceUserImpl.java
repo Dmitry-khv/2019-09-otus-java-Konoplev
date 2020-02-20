@@ -2,6 +2,7 @@ package ru.otus.cache.api.service;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.stereotype.Service;
 import ru.otus.cache.api.repository.UserRepository;
 import ru.otus.cache.api.repository.UserRepositoryException;
 import ru.otus.cache.api.model.User;
@@ -9,7 +10,7 @@ import ru.otus.cache.api.sessionmanager.SessionManager;
 
 import java.util.List;
 
-
+@Service
 public class DBServiceUserImpl implements DBServiceUser {
     private static Logger logger = LoggerFactory.getLogger(DBServiceUserImpl.class);
 

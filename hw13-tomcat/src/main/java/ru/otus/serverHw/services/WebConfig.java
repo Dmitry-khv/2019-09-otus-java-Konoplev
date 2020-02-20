@@ -1,4 +1,4 @@
-package ru.otus;
+package ru.otus.serverHw.services;
 
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.Bean;

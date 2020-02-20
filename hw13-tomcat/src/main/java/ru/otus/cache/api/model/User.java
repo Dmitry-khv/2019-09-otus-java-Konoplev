@@ -1,6 +1,7 @@
 package ru.otus.cache.api.model;
 
 
+import javax.persistence.*;
 import java.util.HashSet;
 import java.util.Set;
 

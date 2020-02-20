@@ -1,5 +1,7 @@
 package ru.otus.serverHw.services;
 
+import ru.otus.cache.api.model.Login;
+
 public interface UserAuthService {
-    boolean authenticate(String login, String password);
+    boolean authenticate(Login login);
 }

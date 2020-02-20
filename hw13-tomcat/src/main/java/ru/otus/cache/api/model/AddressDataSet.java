@@ -1,5 +1,6 @@
 package ru.otus.cache.api.model;
 
+import javax.persistence.*;
 import java.util.Objects;
 
 @Entity
