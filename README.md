@@ -18,3 +18,13 @@ email: konoplev88@mail.ru
 6. [Эмулятор банкомата;](https://github.com/Dmitry-khv/2019-09-otus-java-konoplev/tree/master/hw06-atm)
 
 7. [Департамент ATM;](https://github.com/Dmitry-khv/2019-09-otus-java-konoplev/tree/master/hw07-atm_department)
+
+8. [Cвой json object writer;](https://github.com/Dmitry-khv/2019-09-otus-java-konoplev/tree/master/hw08-myJson)
+
+9. [Самодельный ORM;](https://github.com/Dmitry-khv/2019-09-otus-java-konoplev/tree/master/hw09-jdbc) 
+
+10. [Использование Hibernate;](https://github.com/Dmitry-khv/2019-09-otus-java-konoplev/tree/master/hw10-hibernate)
+
+11. [Свой cache engine;](https://github.com/Dmitry-khv/2019-09-otus-java-konoplev/tree/master/hw11-cache)
+
+12. [Веб сервер;](https://github.com/Dmitry-khv/2019-09-otus-java-konoplev/tree/master/hw12-jetty)

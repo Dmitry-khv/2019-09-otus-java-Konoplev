@@ -17,8 +17,8 @@ public class AdminController {
 
     public AdminController(DBServiceUser serviceUser) {
         this.serviceUser = serviceUser;
-        createAdmin();
     }
+
     @PostConstruct
     public void createAdmin() {
         User admin = new User();
