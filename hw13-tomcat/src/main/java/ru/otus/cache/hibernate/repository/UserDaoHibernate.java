@@ -3,11 +3,10 @@ package ru.otus.cache.hibernate.repository;
 import org.hibernate.Session;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
-import ru.otus.cache.api.repository.UserRepository;
-import ru.otus.cache.api.repository.UserRepositoryException;
 import ru.otus.cache.api.model.User;
+import ru.otus.cache.api.repository.UserDao;
+import ru.otus.cache.api.repository.UserDaoException;
 import ru.otus.cache.api.sessionmanager.SessionManager;
 import ru.otus.cache.hibernate.sessionmanager.DatabaseSessionHibernate;
 import ru.otus.cache.hibernate.sessionmanager.SessionManagerHibernate;
@@ -19,13 +18,12 @@ import javax.persistence.criteria.Root;
 import java.util.List;
 
 @Repository
-public class UserRepositoryHibernate implements UserRepository {
-    private static Logger logger = LoggerFactory.getLogger(UserRepositoryHibernate.class);
+public class UserDaoHibernate implements UserDao {
+    private static Logger logger = LoggerFactory.getLogger(UserDaoHibernate.class);
 
     private final SessionManagerHibernate sessionManagerHibernate;
 
-    @Autowired
-    public UserRepositoryHibernate(SessionManagerHibernate sessionManagerHibernate) {
+    public UserDaoHibernate(SessionManagerHibernate sessionManagerHibernate) {
         this.sessionManagerHibernate = sessionManagerHibernate;
     }
 
@@ -42,7 +40,7 @@ public class UserRepositoryHibernate implements UserRepository {
             return user.getId();
         } catch (Exception e) {
             logger.error(e.getMessage(), e);
-            throw new UserRepositoryException(e);
+            throw new UserDaoException(e);
         }
     }
 
@@ -55,7 +53,7 @@ public class UserRepositoryHibernate implements UserRepository {
             return user;
         } catch (Exception e) {
             logger.error(e.getMessage(), e);
-            throw new UserRepositoryException(e);
+            throw new UserDaoException(e);
         }
     }
 
@@ -84,7 +82,7 @@ public class UserRepositoryHibernate implements UserRepository {
 //            return hibernateSession.createQuery("SELECT * form User", User.class).getResultList();
         } catch (Exception e) {
             logger.error(e.getMessage(), e);
-            throw new UserRepositoryException(e);
+            throw new UserDaoException(e);
         }
     }
 

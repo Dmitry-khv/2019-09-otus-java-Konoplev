@@ -5,7 +5,7 @@ import ru.otus.cache.api.sessionmanager.SessionManager;
 
 import java.util.List;
 
-public interface UserRepository {
+public interface UserDao {
 
     long save(User user);
 

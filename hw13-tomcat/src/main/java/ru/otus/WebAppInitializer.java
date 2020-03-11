@@ -1,4 +1,4 @@
-package ru.otus.serverHw.services;
+package ru.otus;
 
 import org.springframework.web.filter.CharacterEncodingFilter;
 import org.springframework.web.servlet.support.AbstractAnnotationConfigDispatcherServletInitializer;
@@ -6,7 +6,6 @@ import org.springframework.web.servlet.support.AbstractAnnotationConfigDispatche
 import javax.servlet.Filter;
 
 public class WebAppInitializer extends AbstractAnnotationConfigDispatcherServletInitializer {
-    //https://docs.spring.io/spring/docs/current/spring-framework-reference/web.html
 
     @Override
     protected Class<?>[] getRootConfigClasses() {
@@ -30,6 +29,4 @@ public class WebAppInitializer extends AbstractAnnotationConfigDispatcherServlet
         encodingFilter.setForceEncoding(true);
         return new Filter[]{encodingFilter};
     }
-
-
 }
