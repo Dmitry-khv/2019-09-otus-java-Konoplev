@@ -3,8 +3,7 @@ package ru.otus.jdbc;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import ru.otus.api.annotation.Id;
-import ru.otus.jdbc.reflection.ClassHandler;
-import ru.otus.jdbc.reflection.SqlGenerator;
+import ru.otus.jdbc.holder.*;
 
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Field;
@@ -13,30 +12,30 @@ import java.lang.reflect.Modifier;
 import java.sql.*;
 
 public class DBExecutor<T> {
-    private final Connection connection;
     private static Logger logger = LoggerFactory.getLogger(DBExecutor.class);
-    private SqlGenerator<T> sqlGenerator;
+    private Class<?> clazz;
+    private ClassMetaDataHolder classMetaDataHolder;
+    private final SQLQueriesHolder sqlQueriesHolder;
 
-    public DBExecutor(Connection connection) {
-        this.connection = connection;
+    public DBExecutor(SQLQueriesHolder sqlQueriesHolder, ClassMetaDataHolder classMetaDataHolder) {
+        this.classMetaDataHolder = classMetaDataHolder;
+        this.sqlQueriesHolder = sqlQueriesHolder;
     }
 
 
-    public long save(T obj) throws SQLException, IllegalAccessException {
-        checkAnnotation(obj);
-        Class<?> clazz = obj.getClass();
+    public long save(Connection connection, T obj) throws SQLException, IllegalAccessException {
+//        connection = sessionManager.getCurrentSession().getConnection();
         Savepoint savepoint = connection.setSavepoint();
 
-        if(sqlGenerator == null)
-            sqlGenerator = new SqlGenerator<>();
+        Class<?> clazz = obj.getClass();
 
-        String saveSql = sqlGenerator.save(obj);
-        Field[] fields = ClassHandler.getAllFields(clazz);
+        String saveQuery = sqlQueriesHolder.saveSQL(clazz);
+        Field[] allFields = classMetaDataHolder.getAllFields(clazz);
 
-        try (PreparedStatement pst = connection.prepareStatement(saveSql, Statement.RETURN_GENERATED_KEYS)) {
-            for (int idx = 0; idx < fields.length; idx++) {
-                fields[idx].setAccessible(true);
-                pst.setObject(idx + 1, fields[idx].get(obj));
+        try (PreparedStatement pst = connection.prepareStatement(saveQuery, Statement.RETURN_GENERATED_KEYS)) {
+            for (int idx = 0; idx < allFields.length; idx++) {
+                allFields[idx].setAccessible(true);
+                pst.setObject(idx + 1, allFields[idx].get(obj));
             }
             pst.executeUpdate();
             try (ResultSet resultSet = pst.getGeneratedKeys()) {
@@ -50,21 +49,19 @@ public class DBExecutor<T> {
         }
     }
 
-    public T load(Class<T> clazz, long id) throws SQLException, NoSuchMethodException, IllegalAccessException, InvocationTargetException, InstantiationException {
+    public T load(Connection connection, Class<T> clazz, long id) throws SQLException, NoSuchMethodException, IllegalAccessException, InvocationTargetException, InstantiationException {
+//        connection = sessionManager.getCurrentSession().;
         Savepoint savepoint = connection.setSavepoint();
 
-        if(sqlGenerator == null)
-            sqlGenerator = new SqlGenerator<>();
-
-        String loadSql = sqlGenerator.load(clazz);
+        String loadSql = sqlQueriesHolder.loadSQL(clazz);
 
         try (PreparedStatement pst = connection.prepareStatement(loadSql)) {
             pst.setLong(1, id);
             try (ResultSet resultSet = pst.executeQuery()) {
-                resultSet.next();
-                Constructor<T> constructor = ClassHandler.getConstructor(clazz);
-                Field[] fields = ClassHandler.getAllFields(clazz);
+                Constructor<T> constructor = classMetaDataHolder.getConstructor(clazz);
+                Field[] fields = classMetaDataHolder.getAllFields(clazz);
                 Object[] fieldValue = new Object[fields.length];
+                resultSet.next();
 
                 for (int idx = 0; idx < fieldValue.length; idx++) {
                     if (!fields[idx].isAnnotationPresent(Id.class) && !(Modifier.isStatic(fields[idx].getModifiers()) && Modifier.isFinal(fields[idx].getModifiers()))) {
@@ -81,19 +78,16 @@ public class DBExecutor<T> {
         }
     }
 
-    public void update(T obj) throws SQLException {
-        checkAnnotation(obj);
-        Class<?> clazz = obj.getClass();
+    public void update(Connection connection, T obj) throws SQLException {
+//        connection = sessionManager.getCurrentSession().getConnection();
         Savepoint savepoint = connection.setSavepoint();
 
-        if(sqlGenerator == null)
-            sqlGenerator = new SqlGenerator<>();
-
-        String updateSql = sqlGenerator.update(obj);
-        Field[] fields = ClassHandler.getFieldsWithoutIdField(clazz);
+        clazz = obj.getClass();
+        String updateSql = sqlQueriesHolder.updateSQL(clazz);
+        Field[] fields = classMetaDataHolder.getFieldsWithoutIdAnnotation(clazz);
 
         try (PreparedStatement pst = connection.prepareStatement(updateSql)) {
-            Field fieldId = ClassHandler.getFieldWithAnnotationId(clazz);
+            Field fieldId = classMetaDataHolder.getIdAnnotatedField(clazz);
             for (int idx = 0; idx < fields.length; idx++) {
                 Field field = fields[idx];
                 field.setAccessible(true);
@@ -106,18 +100,5 @@ public class DBExecutor<T> {
             connection.rollback(savepoint);
             logger.error(e.getMessage(), e);
         }
-    }
-
-    private void checkAnnotation(T obj) throws SQLException {
-        boolean isAnnotated = false;
-        Class<?> clazz = obj.getClass();
-
-        Field[] fields = ClassHandler.getAllFields(clazz);
-        for (Field field : fields) {
-            if (field.isAnnotationPresent(Id.class))
-                isAnnotated = true;
-        }
-        if(!isAnnotated)
-            throw new SQLException(clazz.getSimpleName() +  " doesn't have annotation " + Id.class.getSimpleName());
     }
 }

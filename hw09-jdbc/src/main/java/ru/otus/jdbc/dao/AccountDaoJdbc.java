@@ -15,17 +15,18 @@ public class AccountDaoJdbc implements AccountDao {
     private static Logger logger = LoggerFactory.getLogger(AccountDaoJdbc.class);
 
     private final SessionManagerJdbc sessionManagerJdbc;
+    private final DBExecutor<Account> dbExecutor;
 
 
-    public AccountDaoJdbc(SessionManagerJdbc sessionManagerJdbc) {
+    public AccountDaoJdbc(SessionManagerJdbc sessionManagerJdbc, DBExecutor<Account> dbExecutor) {
         this.sessionManagerJdbc = sessionManagerJdbc;
+        this.dbExecutor = dbExecutor;
     }
 
     @Override
     public long save(Account account) {
         try {
-            DBExecutor<Account> dbExecutor = new DBExecutor<>(getConnection());
-            return dbExecutor.save(account);
+            return dbExecutor.save(getConnection(), account);
         } catch (Exception e) {
             logger.error(e.getMessage(), e);
             throw new UserDaoException(e);
@@ -35,8 +36,7 @@ public class AccountDaoJdbc implements AccountDao {
     @Override
     public Account findByNo(long id) {
         try {
-            DBExecutor<Account> dbExecutor = new DBExecutor<>(getConnection());
-            return dbExecutor.load(Account.class, id);
+            return dbExecutor.load(getConnection(), Account.class, id);
         } catch (Exception e) {
             logger.error(e.getMessage(), e);
             throw new UserDaoException(e);
@@ -46,8 +46,7 @@ public class AccountDaoJdbc implements AccountDao {
     @Override
     public void update(Account account) {
         try {
-            DBExecutor<Account> dbExecutor = new DBExecutor<>(getConnection());
-            dbExecutor.update(account);
+            dbExecutor.update(getConnection(), account);
         } catch (Exception e) {
             logger.error(e.getMessage(), e);
             throw new UserDaoException(e);
