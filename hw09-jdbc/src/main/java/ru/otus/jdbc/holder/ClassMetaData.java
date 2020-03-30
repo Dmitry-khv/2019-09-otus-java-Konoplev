@@ -4,14 +4,13 @@ import ru.otus.api.annotation.Id;
 
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Field;
-import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
 public class ClassMetaData {
-    private final Class<Id> ID_ANNOTATION = Id.class;
-    private final Class<?> clazz;
+    private static final Class<Id> ID_ANNOTATION = Id.class;
+    private Class<?> clazz;
     private Constructor constructor;
     private Field fieldWithIdAnnotation;
     private Field[] allFields;

@@ -18,20 +18,20 @@ public class SQLQueriesHolderImpl implements SQLQueriesHolder {
     }
 
     @Override
-    public String saveSQL(Class<?> clazz) {
+    public String getSaveQuery(Class<?> clazz) {
         Field[] allFields = classMetaDataHolder.getAllFields(clazz);
         return sqlQueries.get(clazz).getSaveQuery(allFields);
     }
 
     @Override
-    public String updateSQL(Class<?> clazz) {
+    public String getUpdateQuery(Class<?> clazz) {
         Field[] fieldsWithoutId = classMetaDataHolder.getFieldsWithoutIdAnnotation(clazz);
         Field idField = classMetaDataHolder.getIdAnnotatedField(clazz);
         return sqlQueries.get(clazz).getUpdateQuery(fieldsWithoutId, idField);
     }
 
     @Override
-    public String loadSQL(Class<?> clazz) {
+    public String getLoadQuery(Class<?> clazz) {
         Field[] fieldsWithoutId = classMetaDataHolder.getFieldsWithoutIdAnnotation(clazz);
         Field idField = classMetaDataHolder.getIdAnnotatedField(clazz);
         return sqlQueries.get(clazz).getLoadQuery(fieldsWithoutId, idField);

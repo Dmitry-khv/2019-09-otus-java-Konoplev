@@ -4,7 +4,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import ru.otus.api.annotation.Id;
 import ru.otus.jdbc.holder.*;
-
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
@@ -29,7 +28,7 @@ public class DBExecutor<T> {
 
         Class<?> clazz = obj.getClass();
 
-        String saveQuery = sqlQueriesHolder.saveSQL(clazz);
+        String saveQuery = sqlQueriesHolder.getSaveQuery(clazz);
         Field[] allFields = classMetaDataHolder.getAllFields(clazz);
 
         try (PreparedStatement pst = connection.prepareStatement(saveQuery, Statement.RETURN_GENERATED_KEYS)) {
@@ -50,10 +49,9 @@ public class DBExecutor<T> {
     }
 
     public T load(Connection connection, Class<T> clazz, long id) throws SQLException, NoSuchMethodException, IllegalAccessException, InvocationTargetException, InstantiationException {
-//        connection = sessionManager.getCurrentSession().;
         Savepoint savepoint = connection.setSavepoint();
 
-        String loadSql = sqlQueriesHolder.loadSQL(clazz);
+        String loadSql = sqlQueriesHolder.getLoadQuery(clazz);
 
         try (PreparedStatement pst = connection.prepareStatement(loadSql)) {
             pst.setLong(1, id);
@@ -79,11 +77,10 @@ public class DBExecutor<T> {
     }
 
     public void update(Connection connection, T obj) throws SQLException {
-//        connection = sessionManager.getCurrentSession().getConnection();
         Savepoint savepoint = connection.setSavepoint();
 
         clazz = obj.getClass();
-        String updateSql = sqlQueriesHolder.updateSQL(clazz);
+        String updateSql = sqlQueriesHolder.getUpdateQuery(clazz);
         Field[] fields = classMetaDataHolder.getFieldsWithoutIdAnnotation(clazz);
 
         try (PreparedStatement pst = connection.prepareStatement(updateSql)) {
