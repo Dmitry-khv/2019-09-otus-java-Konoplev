@@ -1,14 +1,16 @@
 package ru.otus.controllers;
 
+import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PatchMapping;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.servlet.view.RedirectView;
 import ru.otus.cache.api.model.User;
 import ru.otus.cache.api.service.DBServiceUser;
 import java.util.List;
 
+@Controller
 public class AdminController {
     private final DBServiceUser serviceUser;
 
@@ -16,23 +18,28 @@ public class AdminController {
         this.serviceUser = serviceUser;
     }
 
-    public void createAdmin() {
-        User admin = new User();
-        admin.setRole(User.ROLE.ADMIN);
-        admin.setLogin("admin");
-        admin.setPassword("11111");
-        serviceUser.saveUser(admin);
+
+    @GetMapping("/admin")
+    public String adminView() {
+        return "admin.html";
+    }
+
+    @GetMapping("/admin/save")
+    public String saveUserView(Model model) {
+        model.addAttribute("user", new User());
+        return "admin.html";
     }
 
     @GetMapping("/admin/users")
-    public String usersView(Model model) {
+    public String adminUsersView(Model model) {
         List<User> list = serviceUser.getUserList();
         model.addAttribute("users", list);
-        return "admin";
+        return "admin.html";
     }
 
-    @PatchMapping("/admin/save")
-    public RedirectView saveUser(@ModelAttribute User user) {
+
+    @PostMapping("/admin/save")
+    public RedirectView saveUser(@ModelAttribute("user") User user) {
         serviceUser.saveUser(user);
         return new RedirectView("/admin", true);
     }

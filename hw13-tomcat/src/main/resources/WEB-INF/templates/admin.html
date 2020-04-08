@@ -9,59 +9,54 @@
 
 <h2>Страница администратора</h2>
 
-<!--<form th:action="{@/admin}" method="get">-->
-<!--    <p>-->
-<!--        <input type="submit" name="users" value="Показать список пользователей">-->
-<!--    </p>-->
-
-<!--</form>-->
-
-<!--<h4>Список пользователей</h4>-->
-<!--<table style="width: 400px">-->
-<!--    <thead>-->
-<!--    <tr>-->
-<!--        <td style="width: 50px">Id</td>-->
-<!--        <td style="width: 100px">Имя</td>-->
-<!--        <td style="width: 100px">Логин</td>-->
-<!--        <td style="width: 100px">Пароль</td>-->
-<!--    </tr>-->
-<!--    </thead>-->
-<!--    <tbody>-->
-<!--    <tr th:each="user : ${users}">-->
-<!--        <td th:text="${user.id}"></td>-->
-<!--        <td th:text="${user.name}"></td>-->
-<!--        <td th:text="${user.login}"></td>-->
-<!--        <td th:text="${user.password}"></td>-->
-<!--    </tr>-->
-<!--    </tbody>-->
-<!--</table>-->
-
-<!--<p>&nbsp;</p>-->
-
-<!--<form id="create-form" th:action="@{/admin}" th:object="${user}" th:method="post" accept-charset="utf-8">-->
-
-<!--    <p>Добавить пользователя</p>-->
-
-<!--    <p><input name="name" required="required" type="text" placeholder="Имя" th:value="${user.name}"/></p>-->
-
-<!--    <p><input name="age" required="required" type="number" placeholder="Возраст" th:value="${user.age}"/></p>-->
-
-<!--    <p><input name="login" required="required" type="text" placeholder="Логин" th:value="${user.login}"/></p>-->
-
-<!--    <p><input name="password" type="text" placeholder="Пароль" th:value="${user.password}"/></p>-->
-
-<!--    <p><select name="role" required="required"><option value="admin">Admin</option><option value="user">User</option></select></p>-->
-
-<!--    <div class="row">-->
-<!--        <button type="submit">Save</button>-->
-<!--    </div>-->
-
-<!--</form>-->
-
-<!--<form th:action="@{/admin}" th:method="post">-->
-<!--    <input name="exit" type="submit" value="Выход">-->
-<!--</form>-->
+<form th:action="@{/admin/users}" method="get">
+    <p>
+    <input type="submit" name="users" value="Показать список пользователей">
+    </p>
+</form>
 
 
+</form>
+<h4>Список пользователей</h4>
+<table style="width: 400px">
+    <thead>
+    <tr>
+        <td style="width: 50px">Id</td>
+        <td style="width: 100px">Имя</td>
+        <td style="width: 100px">Логин</td>
+        <td style="width: 100px">Пароль</td>
+    </tr>
+    </thead>
+    <tbody>
+    <tr th:each="user : ${users}">
+        <td th:text="${user.id}"></td>
+        <td th:text="${user.name}"></td>
+        <td th:text="${user.login}"></td>
+        <td th:text="${user.password}"></td>
+    </tr>
+    </tbody>
+</table>
+</form>
+
+
+<form th:action="@{/admin/save}" method="get">
+    <p>
+        <input type="submit" name="new user" value="Добавить пользователя">
+    </p>
+</form>
+
+<form id="add user" th:action="@{/admin/save}" th:object="${user}" th:method="post" accept-charset="UTF-8">
+    <br>
+    <input type="hidden" name="id" th:value="${user.id}">
+    <label for="name">Name</label>
+    <input id="name" type="text" name="name" th:value="${user.name}">
+    <label for="age">Age</label>
+    <input id="age" type="text" name="age" th:value="${user.age}">
+    <label for="login">Login</label>
+    <input id="login" type="text" name="login" th:value="${user.login}">
+    <label for="password">Password</label>
+    <input id="password" type="text" name="password" th:value="${user.password}">
+    <input type="submit" name="add users" value="Добавить пользователя">
+</form>
 </body>
 </html>

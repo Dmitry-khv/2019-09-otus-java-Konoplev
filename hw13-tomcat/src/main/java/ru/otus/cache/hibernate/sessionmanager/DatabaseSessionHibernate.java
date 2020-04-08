@@ -2,7 +2,6 @@ package ru.otus.cache.hibernate.sessionmanager;
 
 import org.hibernate.Session;
 import org.hibernate.Transaction;
-import org.springframework.stereotype.Service;
 import ru.otus.cache.api.sessionmanager.DatabaseSession;
 
 public class DatabaseSessionHibernate implements DatabaseSession {
