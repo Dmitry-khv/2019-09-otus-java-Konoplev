@@ -14,16 +14,16 @@ public class LoginController {
 
     public LoginController(DBServiceUser serviceUser) {
         this.serviceUser = serviceUser;
-        createAdmin();
+//        createAdmin();
     }
 
-    public void createAdmin() {
-        User admin = new User();
-        admin.setRole(User.ROLE.ADMIN);
-        admin.setLogin("admin");
-        admin.setPassword("11111");
-        serviceUser.saveUser(admin);
-    }
+//    public void createAdmin() {
+//        User admin = new User();
+//        admin.setRole(User.ROLE.ADMIN);
+//        admin.setLogin("admin");
+//        admin.setPassword("11111");
+//        serviceUser.saveUser(admin);
+//    }
 
     @GetMapping("/")
     public String adminPage() {

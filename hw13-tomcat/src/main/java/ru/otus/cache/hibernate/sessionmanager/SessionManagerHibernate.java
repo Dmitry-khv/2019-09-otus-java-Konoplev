@@ -4,12 +4,12 @@ import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Repository;
+import org.springframework.stereotype.Component;
 import ru.otus.cache.api.sessionmanager.SessionManager;
 import ru.otus.cache.api.sessionmanager.SessionManagerException;
 
 
-@Repository
+@Component
 public class SessionManagerHibernate implements SessionManager {
 
   private DatabaseSessionHibernate databaseSession;
