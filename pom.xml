@@ -20,6 +20,7 @@
         <module>hw10-hibernate</module>
         <module>hw11-cache</module>
         <module>hw12-jetty</module>
+        <module>hw13-tomcat</module>
     </modules>
 
     <properties>

@@ -14,7 +14,7 @@ import ru.otus.cache.api.model.User;
 import ru.otus.cache.api.service.DBServiceUser;
 import ru.otus.cache.api.service.DBServiceUserImpl;
 import ru.otus.cache.hibernate.HibernateUtils;
-import ru.otus.cache.hibernate.dao.UserDaoHibernate;
+import ru.otus.cache.hibernate.repository.UserDaoHibernate;
 import ru.otus.cache.hibernate.sessionmanager.SessionManagerHibernate;
 import ru.otus.serverHw.services.*;
 import ru.otus.serverHw.servlet.AdminServlet;

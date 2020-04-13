@@ -1,4 +1,4 @@
-package ru.otus.cache.hibernate.dao;
+package ru.otus.cache.hibernate.repository;
 
 import org.hibernate.Session;
 import org.slf4j.Logger;

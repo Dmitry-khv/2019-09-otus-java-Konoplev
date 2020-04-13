@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8"/>
+    <title>login</title>
+</head>
+<body>
+<div class="top">
+    <img th:src="@{img/login.png}">
+
+    <form id="login-form" th:action="@{/login}" th:object="${user}" th:method="post" accept-charset="utf-8">
+        <br/>
+        <label>
+            login <br/>
+            <input id="input-login" type="text" name="login" th:value="${user.login}"  value="admin" >
+        </label>
+        <br/><br/>
+        <label>
+            password<br/>
+            <input id="input-password" type="password" name="password" th:value="${user.password}" value="11111">
+        </label>
+        <br/><br/>
+        <input type="submit" value="Перейти к списку пользователей">
+    </form>
+</div>
+</body>
+</html>

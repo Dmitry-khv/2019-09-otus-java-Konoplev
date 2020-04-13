@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>admin</title>
+</head>
+
+<body>
+
+<h2>Страница администратора</h2>
+<hr>
+<a th:href="@{/admin/users}">Show user list</a>
+
+
+</form>
+<h4>Список пользователей</h4>
+<table style="width: 400px">
+    <thead>
+    <tr>
+        <td style="width: 50px">Id</td>
+        <td style="width: 100px">Имя</td>
+        <td style="width: 100px">Логин</td>
+        <td style="width: 100px">Пароль</td>
+    </tr>
+    </thead>
+    <tbody>
+    <tr th:each="user : ${users}">
+        <td th:text="${user.id}"></td>
+        <td th:text="${user.name}"></td>
+        <td th:text="${user.login}"></td>
+        <td th:text="${user.password}"></td>
+    </tr>
+    </tbody>
+</table>
+</form>
+<hr>
+
+
+<a th:href="@{/admin/save}" href="registration.html">Create new user</a>
+
+</body>
+</html>
