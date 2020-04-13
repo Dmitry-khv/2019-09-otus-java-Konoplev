@@ -19,6 +19,7 @@ public class InitialDBService {
     public void createAdmin() {
         User admin = new User();
         admin.setRole(User.ROLE.ADMIN);
+        admin.setName("name");
         admin.setLogin("admin");
         admin.setPassword("11111");
         serviceUser.saveUser(admin);

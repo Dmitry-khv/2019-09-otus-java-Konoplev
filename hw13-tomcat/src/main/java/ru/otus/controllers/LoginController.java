@@ -14,27 +14,18 @@ public class LoginController {
 
     public LoginController(DBServiceUser serviceUser) {
         this.serviceUser = serviceUser;
-//        createAdmin();
     }
 
-//    public void createAdmin() {
-//        User admin = new User();
-//        admin.setRole(User.ROLE.ADMIN);
-//        admin.setLogin("admin");
-//        admin.setPassword("11111");
-//        serviceUser.saveUser(admin);
-//    }
-
     @GetMapping("/")
-    public String adminPage() {
-        return "index.html";
+    public String startPage() {
+        return "index";
     }
 
 
     @GetMapping("/login")
     public String loginPage(Model model) {
         model.addAttribute("user", new User());
-        return "login.html";
+        return "login";
     }
 
     @PostMapping("/login")

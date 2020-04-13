@@ -21,20 +21,20 @@ public class AdminController {
 
     @GetMapping("/admin")
     public String adminView() {
-        return "admin.html";
+        return "admin";
     }
 
     @GetMapping("/admin/save")
     public String saveUserView(Model model) {
         model.addAttribute("user", new User());
-        return "admin.html";
+        return "registration";
     }
 
     @GetMapping("/admin/users")
     public String adminUsersView(Model model) {
         List<User> list = serviceUser.getUserList();
         model.addAttribute("users", list);
-        return "admin.html";
+        return "admin";
     }
 
 
