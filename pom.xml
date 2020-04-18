@@ -21,6 +21,9 @@
         <module>hw11-cache</module>
         <module>hw12-jetty</module>
         <module>hw13-tomcat</module>
+        <module>hw3-gc</module>
+        <module>hw03-gc</module>
+        <module>hw14-jmm</module>
     </modules>
 
     <properties>
